@@ -14,5 +14,4 @@ sort_label = Label(window,
 # output_label = Label(window,
 #                   )
 
-
 window.mainloop()
