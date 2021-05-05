@@ -1,10 +1,14 @@
+import copy
 import tkinter as tk
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 from tkinter import filedialog
+
 
 window = tk.Tk()
 window.title("AL Form Project 201010298 팽건우")
 window.geometry("1080x720") #가로 * 세로
-
 
 class Sort_Gui:
 	def __init__(self):
@@ -28,25 +32,42 @@ class Sort_Gui:
 		self.sort_show = tk.Label(window)
 		self.sort_show.grid(row=10, column=5)
 	
-		input_button = tk.Button(window, text="find input file", width=20, command=self.find_file).grid(row=20, column=10)
+		input_button = tk.Button(window, text="find input file", width=20, command=self.find_file).grid(row=20, column=12)
+		output_button = tk.Button(window, text="save result", width=20, command=self.save_file).grid(row=20, column=18)
+		# sort_start_button = tk.Button(window, text="Sort Start", width=20, command=self.sort_start).grid(row=30, column=12)
+
 		window.mainloop()
 
+	# def sort_start(self):
+	# 	if (self.sort_num == 1):
+
+
 	def sort_select(self):
-		sort_num = self.sort_var.get()
-		if (sort_num == 1):
+		self.sort_num = self.sort_var.get()
+		if (self.sort_num == 1):
 			print(self.selection_sort(self.numbers))
+			self.result = "선택 정렬\n" + ' '.join(map(str,self.numbers))
+			self.numbers = copy.deepcopy(self.nums)
 			self.sort_show.config(text="선택 정렬")
-		elif (sort_num == 2):
+		elif (self.sort_num == 2):
 			print(self.bubble_sort(self.numbers))
+			self.result = "버블 정렬\n" + ' '.join(map(str,self.numbers))
+			self.numbers = copy.deepcopy(self.nums)
 			self.sort_show.config(text="버블 정렬")
-		elif (sort_num == 3):
+		elif (self.sort_num == 3):
 			print(self.insert_sort(self.numbers))
+			self.result = "삽입 정렬\n" + ' '.join(map(str,self.numbers))
+			self.numbers = copy.deepcopy(self.nums)
 			self.sort_show.config(text="삽입 정렬")
-		elif (sort_num == 4):
+		elif (self.sort_num == 4):
 			print(self.merge_sort(self.numbers))
+			self.result = "병합 정렬\n" + ' '.join(map(str,self.numbers))
+			self.numbers = copy.deepcopy(self.nums)
 			self.sort_show.config(text="병합 정렬")
 		else:
 			print(self.quick_sort(self.numbers))
+			self.result = "퀵 정렬\n" + ' '.join(map(str,self.numbers))
+			self.numbers = copy.deepcopy(self.nums)
 			self.sort_show.config(text="퀵 정렬")
 
 	def selection_sort(self, arr):
@@ -95,7 +116,6 @@ class Sort_Gui:
 		
 		return result
 
-
 	def quick_sort(self, arr):
 		if len(arr) < 2:
 			return arr
@@ -115,32 +135,23 @@ class Sort_Gui:
 		
 		return self.quick_sort(small_arr) + equal_arr + self.quick_sort(large_arr)
 
-
 	def find_file(self):
-		self.numbers = []
+		self.nums = []
 		input_path = filedialog.askopenfilename(initialdir='/', title='select a file',
 											filetypes=(("txt files","*.txt"),("all files","*.*")))
 		input_file = open(input_path, "r", encoding='UTF-8')
 		num_str = input_file.read().splitlines()
 		for num in num_str:
-			self.numbers.append(int(num))
-				
+			self.nums.append(int(num))
+		self.numbers = copy.deepcopy(self.nums)
+		input_file.close()
 
-
+	def save_file(self):
+		output_file = open('output.txt', "w", encoding='UTF-8')
+		output_file.write(self.result)
+		output_file.close()
 		
 
-#------------------------
-
-#file 부분 https://appia.tistory.com/111
-# https://docs.python.org/ko/3.9/library/dialog.html
+Sort_Gui()
 
 
-
-
-
-# sort_start_button = tk.Button(window, text="Sort Start", width=20, command=sort_select(numbers_global)).grid(row=20, column=15)
-
-# 그래프 그리기 부분
-# https://www.delftstack.com/ko/howto/matplotlib/how-to-plot-in-real-time-using-matplotlib/
-
-sort_gui = Sort_Gui()
