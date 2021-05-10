@@ -1,4 +1,9 @@
 import copy
+import algorithms
+import time
+import os
+import sys
+import pygame
 import tkinter as tk
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,9 +11,7 @@ import matplotlib.animation as ani
 from tkinter import filedialog
 
 
-
 class Bubble_sort(tk.Frame):
-
 	# def bubble_sort(self, arr):
 	# 	for i in range(1, len(arr)):
 	# 		for j in range(len(arr) - i):
@@ -41,6 +44,7 @@ class Bubble_sort(tk.Frame):
 			self.draw.create_oval(x, self.lists[x], x+5, self.lists[x]+5, fill='black')
 
 		self.draw.after(100, self.animate)
+
 
 class	Selection_sort(tk.Frame):
 	# def selection_sort(self, arr):
@@ -89,8 +93,6 @@ class	Selection_sort(tk.Frame):
 			self.draw.after(100, self.animate, i+1)
 
 class Insert_sort(tk.Frame):
-
-	
 	# def insert_sort(self, arr):
 	# 	for i in range(1, len(arr)):
 	# 		for j in range(i, 0, -1):
@@ -104,14 +106,13 @@ class Insert_sort(tk.Frame):
 		self.grid(row=40,column=12)
 		self.create_widgets()
 
-
 	def create_widgets(self):
 		self.draw = tk.Canvas(self)
 		self.draw['height'] = 500
 		self.draw['width'] = 500
 		self.draw.grid(row=40, column=12)
 		for x in range(len(self.lists)):
-			self.draw.create_oval(x, self.lists[x], x+5, self.lists[x]+5, fill='red')
+			self.draw.create_oval(x, self.lists[x], x+20, self.lists[x]+20, fill='blue')
 		self.animate()
 
 	def animate(self,i=0):
@@ -122,12 +123,81 @@ class Insert_sort(tk.Frame):
 					self.lists[j], self.lists[j+1] = self.lists[j+1], self.lists[j]
 			
 			for x in range(len(self.lists)):
-				self.draw.create_oval(x, self.lists[x], x+5, self.lists[x]+5, fill='black')
+				self.draw.create_oval(x, self.lists[x], x+5, self.lists[x]+5, fill='blue')
 
 			self.draw.after(100, self.animate,i+1)
 
+class Merge_sort(tk.Frame):
+	# def merge_sort(self, arr):
+	# 	if len(arr) < 2:
+	# 		return arr
+		
+	# 	mid = len(arr) // 2
+	# 	left_arr = self.merge_sort(arr[:mid])
+	# 	right_arr = self.merge_sort(arr[mid:])
+		
+	# 	result = []
+	# 	left = right = 0
+	# 	while (left < len(left_arr) and right < len(right_arr)):
+	# 		if left_arr[left] < right_arr[right]:
+	# 			result.append(left_arr[left])
+	# 			left += 1
+	# 		else:
+	# 			result.append(right_arr[right])
+	# 			right += 1
+		
+	# 	result += left_arr[left:]
+	# 	result += right_arr[right:]
+		
+	# 	return result
+
+	def __init__(self, lists, master=None):
+		super().__init__(master)
+		self.lists = lists
+		self.grid(row=40,column=12)
+		self.create_widgets()
+
+	def create_widgets(self):
+		self.draw = tk.Canvas(self)
+		self.draw['height'] = 500
+		self.draw['width'] = 500
+		self.draw.grid(row=40, column=12)
+		self.sort(self.lists)
+
+	def sort(self, arr):
+		if len(arr) < 2:
+			return arr
+		mid = len(arr) // 2
+		left_arr = self.sort(arr[:mid])
+		right_arr = self.sort(arr[mid:])
+		return self.animate(left_arr, right_arr)
+
+	def animate(self, left_arr, right_arr):
+		result = []
+		l, h = 0, 0
+
+		while l < len(left_arr) and h < len(right_arr):
+			self.draw.delete(tk.ALL)
+			if left_arr[l] < right_arr[h]:
+				result.append(left_arr[l])
+				l += 1
+			else:
+				result.append(right_arr[h])
+				h += 1
+			
+			for x in range(len(result)):
+				self.draw.create_oval(x, result[x], x+5, result[x]+5, fill='blue')
+
+		result += left_arr[l:]
+		result += right_arr[h:]
+		self.lists = result
+		for x in range(len(result)):
+			self.draw.create_oval(x, result[x], x+5, result[x]+5, fill='blue')
+		return result
+
 class Sort_Gui:
-	def __init__(self):
+	def __init__(self, window):
+		self.window = window
 		self.sort_var = tk.IntVar()
 
 		sort_label = tk.Label(window, 
@@ -150,8 +220,7 @@ class Sort_Gui:
 		input_button = tk.Button(window, text="find input file", width=20, command=self.find_file).grid(row=20, column=12)
 		output_button = tk.Button(window, text="save result", width=20, command=self.save_file).grid(row=20, column=18)
 		# play_button = tk.Button(window, text="play sort", width=20, command=self.play_sort).grid(row=30, column=12)
-
-		window.mainloop()
+		window.update()
 
 	def sort_select(self):
 		self.sort_num = self.sort_var.get()
@@ -174,42 +243,16 @@ class Sort_Gui:
 			self.sort_show.config(text="삽입 정렬")
 			Insert_sort(self.numbers, master=None)
 		elif (self.sort_num == 4):
-			print(self.merge_sort(self.numbers))
+			# print(self.merge_sort(self.numbers))
 			self.result = "병합 정렬\n" + ' '.join(map(str,self.numbers))
 			self.numbers = copy.deepcopy(self.nums)
 			self.sort_show.config(text="병합 정렬")
+			Merge_sort(self.numbers, master=None)
 		else:
 			print(self.quick_sort(self.numbers))
 			self.result = "퀵 정렬\n" + ' '.join(map(str,self.numbers))
 			self.numbers = copy.deepcopy(self.nums)
 			self.sort_show.config(text="퀵 정렬")
-
-
-
-
-
-	def merge_sort(self, arr):
-		if len(arr) < 2:
-			return arr
-		
-		mid = len(arr) // 2
-		left_arr = self.merge_sort(arr[:mid])
-		right_arr = self.merge_sort(arr[mid:])
-		
-		result = []
-		left = right = 0
-		while (left < len(left_arr) and right < len(right_arr)):
-			if left_arr[left] < right_arr[right]:
-				result.append(left_arr[left])
-				left += 1
-			else:
-				result.append(right_arr[right])
-				right += 1
-		
-		result += left_arr[left:]
-		result += right_arr[right:]
-		
-		return result
 
 	def quick_sort(self, arr):
 		if len(arr) < 2:
@@ -247,20 +290,9 @@ class Sort_Gui:
 		output_file.close()
 
 
-
-
 if __name__ == '__main__':
 	window = tk.Tk()
 	window.title("AL Form Project 201010298 팽건우")
 	window.geometry("1080x720") #가로 * 세로
-	sort_gui = Sort_Gui()
-	# sort_gui.mainloop()
-
-
-
-# unorder = [ 18, 195, 177, 74, 84, 183, 147, 95, 3, 157, 173, 176, 181, 168, 139, 21, 143, 101, 94, 43, 93, 91, 169, 171, 78, 41, 50, 26, 178, 194, 33, 170, 30, 118, 112, 77, 69, 1, 150, 35]
-
-# root = tk.Tk()
-# root.title("그리기 객체")
-# app=Bubble_sort(unorder, master=root)
-# app.mainloop()
+	sort_gui = Sort_Gui(window)
+	window.mainloop()
