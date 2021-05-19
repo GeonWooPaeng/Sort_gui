@@ -15,7 +15,7 @@ def merge(data, left, right, drawData):
 	drawData(data, getColorArray(len(data), head,
 						tail, border, border))
 	time.sleep(0.3)
-	
+
 	while i < len(left) and j < len(right):
 		if left[i] < right[j]:
 			result.append(left[i])
@@ -46,7 +46,7 @@ def getColorArray(dataLen, head, tail, border,
 			colorArray.append('Grey')
 		else:
 			colorArray.append('White')
-  
+
 		if i == tail:
 			colorArray[i] = 'Blue'
 		elif i == border:
@@ -57,5 +57,4 @@ def getColorArray(dataLen, head, tail, border,
 		if isSwaping:
 			if i == border or i == currIdx:
 				colorArray[i] = 'Green'
-  
 	return colorArray

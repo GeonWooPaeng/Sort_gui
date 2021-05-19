@@ -47,7 +47,14 @@ Start 버튼을 누르면 정렬이 실행됩니다.
 5.
 After the sorting click the "Save result file" button
 you can save the sorting data in ouput.txt
-정렬이 끝난 뒤 Save result file을 누르면 ouput.txt파일에 정렬된 값이 저장됩니다.
+정렬이 끝난 뒤 Save result file을 누르면 
+ouput.txt파일에 정렬된 값이 저장됩니다.
+
+6.
+If you want to other sort program 
+you will click other sort type and do 3, 4, 5 
+다른 정렬을 하고 싶으시면 그냥 다른 정렬을 선택하고 
+Make bar을 다시 누르고 반복하면 됩니다.
 
 *주의
 정렬되는 동안 화면을 누르거나 값이 너무 많아지면 렉이 걸릴수 있습니다.
