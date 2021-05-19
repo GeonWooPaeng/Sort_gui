@@ -5,6 +5,7 @@ import os
 import sys
 import pygame
 import tkinter as tk
+import pygame as pg
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as ani
@@ -102,52 +103,103 @@ class Insert_sort(tk.Frame):
 
 			self.draw.after(100, self.animate, i+1)
 
-
-class Merge_sort(tk.Frame):
+class Merge_Sort(tk.Frame):
 	def __init__(self, lists, master=None):
-		super().__init__(master)
+		super().__init__("MergeSort")
 		self.lists = lists
-		self.grid(row=40,column=12)
-		self.create_widgets()
+		algorithm(self.lists)
 
-	def create_widgets(self):
-		self.draw = tk.Canvas(self)
-		self.draw['height'] = 500
-		self.draw['width'] = 500
-		self.draw.grid(row=40, column=12)
-		self.sort(self.lists)
+	def algorithm(self, array):
+		if len(array) < 2:
+			return array
+		mid = len(array) // 2
+		left = self.algorithm(array[:mid])
+		right = self.algorithm(array[mid:])
+		return self.merge(left, right)
 
-	def animate(self, arr):
-		self.draw.delete(tk.ALL)
-		for x in range(len(arr)):
-			self.draw.create_oval(x, arr[x], x+5, arr[x]+5, fill='blue')
-
-	def sort(self, arr):
-		if len(arr) < 2:
-			return arr
-		mid = len(arr) // 2
-		left_arr = self.sort(arr[:mid])
-		right_arr = self.sort(arr[mid:])
-		return self.merge(left_arr, right_arr)
-
-	def merge(self, left_arr, right_arr):
+	def merge(self, left, right):
 		result = []
-		l, h = 0, 0
-
-		while l < len(left_arr) and h < len(right_arr):
-			if left_arr[l] < right_arr[h]:
-				result.append(left_arr[l])
-				l += 1
+		i, j = 0, 0
+		while i < len(left) and j < len(right):
+			if left[i] < right[j]:
+				result.append(left[i])
+				i += 1
 			else:
-				result.append(right_arr[h])
-				h += 1
-			self.animate(self.lists)
-
-		result += left_arr[l:]
-		result += right_arr[h:]
-		self.lists = result
-		self.animate(self.lists)
+				result.append(right[j])
+				j += 1
+			self.visualizer.update()
+		result += left[i:]
+		result += right[j:]
+		self.array = result
+		self.visualizer.update()
 		return result
+	
+	dimensions = (800, 600)
+	display = pg.display.set_mode(dimensions)
+	# Fill the window with purple hue
+	display.fill(pg.Color("#a48be0"))
+
+	def update(self, algorithm, swap1=None, swap2=None):
+		# The function responsible for drawing the sorted array on each iteration
+		display.fill(pg.Color("#a48be0"))
+		pg.display.set_caption("Sorting Visualizer     Algorithm: {}     Time: {:.3f}      Status: Sorting...".format(algorithm.name, time.time() - algorithm.start_time)) # Display on title bar
+		k = int(dimensions[0]/len(algorithm.array))
+		for i in range(len(algorithm.array)):
+			colour = (80, 0, 255)
+			if swap1 == algorithm.array[i]:
+				colour = (0,255,0)
+			elif swap2 == algorithm.array[i]:
+				colour = (255,0,0)
+			# The most important step that renders the rectangles to the screen that gets sorted.
+			# pg.draw.rect(dsiplay_window, color_of_rectangle, size_of_rectangle)
+			pg.draw.rect(display, colour, (i*k,dimensions[1],k,-algorithm.array[i]))
+		pg.display.update()
+
+# class Merge_sort(tk.Frame):
+# 	def __init__(self, lists, master=None):
+# 		super().__init__(master)
+# 		self.lists = lists
+# 		self.grid(row=40,column=12)
+# 		self.create_widgets()
+
+# 	def create_widgets(self):
+# 		self.draw = tk.Canvas(self)
+# 		self.draw['height'] = 500
+# 		self.draw['width'] = 500
+# 		self.draw.grid(row=40, column=12)
+# 		self.sort(self.lists)
+
+# 	def animate(self, arr):
+# 		self.draw.delete(tk.ALL)
+# 		for x in range(len(arr)):
+# 			self.draw.create_oval(x, arr[x], x+5, arr[x]+5, fill='blue')
+
+# 	def sort(self, arr):
+# 		if len(arr) < 2:
+# 			return arr
+# 		mid = len(arr) // 2
+# 		left_arr = self.sort(arr[:mid])
+# 		right_arr = self.sort(arr[mid:])
+# 		return self.merge(left_arr, right_arr)
+
+# 	def merge(self, left_arr, right_arr):
+# 		result = []
+# 		l, h = 0, 0
+
+# 		while l < len(left_arr) and h < len(right_arr):
+# 			if left_arr[l] < right_arr[h]:
+# 				result.append(left_arr[l])
+# 				l += 1
+# 			else:
+# 				result.append(right_arr[h])
+# 				h += 1
+# 			self.animate(self.lists)
+
+# 		result += left_arr[l:]
+# 		result += right_arr[h:]
+# 		self.lists = result
+# 		self.animate(self.lists)
+# 		return result
 
 class Sort_Gui:
 	def __init__(self, window):
