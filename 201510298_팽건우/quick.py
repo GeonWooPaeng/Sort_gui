@@ -81,5 +81,5 @@ def getColorArray(dataLen, head, tail, border,
 		if isSwaping:
 			if i == border or i == currIdx:
 				colorArray[i] = 'Green'
-  
+
 	return colorArray

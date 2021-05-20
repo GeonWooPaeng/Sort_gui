@@ -1,2 +1,2 @@
-Quick Sort 
+Bubble Sort 
 2 3 4 6 53 55 62 73 114 117 125 179

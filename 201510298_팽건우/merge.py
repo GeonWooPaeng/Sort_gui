@@ -1,60 +1,49 @@
 import time
 
-def merge_sort(data, drawData):
-	if len(data) < 2:
-		return data
-	mid = len(data) // 2
-	left = merge_sort(data[:mid], drawData)
-	right = merge_sort(data[mid:], drawData)
-	return merge(data, left, right, drawData)
+def merge_sort(data, left, right, drawData):
+	if left < right:
+		mid = (left + right) // 2
+		merge_sort(data, left, mid, drawData)
+		merge_sort(data, mid + 1, right, drawData)
+		merge(data, left, mid, right, drawData)
 
-def merge(data, left, right, drawData):
-	result = []
-	i, j = 0, 0
-
-	drawData(data, getColorArray(len(data), head,
-						tail, border, border))
+def merge(data, left, mid, right, drawData):
+	
+	drawData(data, getColorArray(len(data), left, mid, right))
 	time.sleep(0.3)
 
-	while i < len(left) and j < len(right):
-		if left[i] < right[j]:
-			result.append(left[i])
-			i+=1
+	left_part = data[left:mid+1]
+	right_part = data[mid+1:right+1]
+
+	left_idx, right_idx = 0, 0
+
+	for data_idx in range(left, right+1):
+		if left_idx < len(left_part) and right_idx < len(right_part):
+			if left_part[left_idx] <= right_part[right_idx]:
+				data[data_idx] = left_part[left_idx]
+				left_idx += 1
+			else:
+				data[data_idx] = right_part[right_idx]
+				right_idx += 1
+		elif left_idx < len(left_part):
+			data[data_idx] = left_part[left_idx]
+			left_idx += 1
 		else:
-			result.append(right[j])
-			j+=1
+			data[data_idx] = right_part[right_idx]
+			right_idx += 1
 
-		drawData(data, getColorArray(len(data), head, 
-							tail, border, border))
-		time.sleep(0.3)
-
-	result += left[i:]
-	result += right[j:]
-
-	drawData(data, getColorArray(len(data), head,
-							tail, border, border))
+	drawData(data, ['Green' if x >= left and x <= right else "White" for x in range(len(data))])
 	time.sleep(0.3)
-	return result
 
-
-def getColorArray(dataLen, head, tail, border,
-				  currIdx, isSwaping=False):
+def getColorArray(dataLen, left, mid, right):
 	colorArray = []
 	for i in range(dataLen):
 		# base coloring
-		if i >= head and i <= tail:
-			colorArray.append('Grey')
+		if i >= left and i <= right:
+			if i <= mid:
+				colorArray.append("Yellow") #left_part
+			else:
+				colorArray.append("Blue") #right_part
 		else:
-			colorArray.append('White')
-
-		if i == tail:
-			colorArray[i] = 'Blue'
-		elif i == border:
-			colorArray[i] = 'Red'
-		elif i == currIdx:
-			colorArray[i] = 'Yellow'
-  
-		if isSwaping:
-			if i == border or i == currIdx:
-				colorArray[i] = 'Green'
+			colorArray.append("White")
 	return colorArray

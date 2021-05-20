@@ -12,7 +12,6 @@ def selection_sort(data, drawData):
 
 		drawData(data, getColorArray(data, i, min_idx))
 		time.sleep(0.3)
-	drawData(data, ['Green' for x in range(n)])
 
 def getColorArray(data, idx, mdx):
 	colorArray = []

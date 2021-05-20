@@ -48,7 +48,7 @@ Start 버튼을 누르면 정렬이 실행됩니다.
 After the sorting click the "Save result file" button
 you can save the sorting data in ouput.txt
 정렬이 끝난 뒤 Save result file을 누르면 
-ouput.txt파일에 정렬된 값이 저장됩니다.
+ouput.txt파일에 정렬된 값이 생성됩니다.
 
 6.
 If you want to other sort program 

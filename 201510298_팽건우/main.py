@@ -1,25 +1,21 @@
-# code for Quick Sort Visualizer 
-# using Python and Tkinter
-# import modules
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
-import random
-import copy
 from quick import quick_sort
 from merge import merge_sort
 from bubble import bubble_sort
 from selection import selection_sort
 from insertion import insertion_sort
+import random
+import copy
 
 # initialising root class for Tkinter
 root = Tk()
-root.title("Quick Sort Visualizer")
-  
-# maximum window size
+root.title("201510298_gwpaeng")
+
 root.maxsize(1080, 720)
 root.config(bg="Black")
-  
+
 select_alg = StringVar()
 data = []
 numbers = []
@@ -38,7 +34,7 @@ def find_file():
 	input_file.close()
 
 def save_file():
-	output_file = open('output.txt', "w", encoding='UTF-8')
+	output_file = open('201510298_팽건우/output.txt', "w", encoding='UTF-8')
 	output_file.write(result)
 	output_file.close()
 
@@ -63,7 +59,7 @@ def drawData(data, colorlist):
 	# numeric data within the
 	# given range
 	normalized_data = [i / max(data) for i in data]
-  
+
 	for i, height in enumerate(normalized_data):
 		# top left corner
 		x0 = i*x_width + offset + spacing
@@ -91,29 +87,32 @@ def start_algorithm():
 
 	if (algmenu.get() == 'Selection Sort'):
 		selection_sort(data, drawData)
-		result = ' '.join(map(str, data))
+		drawData(data, ['Green' for x in range(len(data))])
+		result = "Selection Sort \n" + ' '.join(map(str, data))
 		data = copy.deepcopy(numbers)
 
 	if (algmenu.get() == 'Insertion Sort'):
 		insertion_sort(data, drawData)
-		result = ' '.join(map(str, data))
+		drawData(data, ['Green' for x in range(len(data))])
+		result = "Insertion Sort \n" + ' '.join(map(str, data))
 		data = copy.deepcopy(numbers)
 
 	if (algmenu.get() == 'Bubble Sort'):
 		bubble_sort(data, drawData)
-		result = ' '.join(map(str, data))
+		drawData(data, ['Green' for x in range(len(data))])
+		result = "Bubble Sort \n" + ' '.join(map(str, data))
 		data = copy.deepcopy(numbers)
 
 	if (algmenu.get() == 'Quick Sort'):
 		quick_sort(data, 0, len(data)-1, drawData)
 		drawData(data, ['Green' for x in range(len(data))])
-		result = ' '.join(map(str, data))
+		result = "Quick Sort \n" + ' '.join(map(str, data))
 		data = copy.deepcopy(numbers)
 
 	if (algmenu.get() == 'Merge Sort'):
-		merge_sort(data, drawData)
+		merge_sort(data, 0, len(data)-1, drawData)
 		drawData(data, ['Green' for x in range(len(data))])
-		result = ' '.join(map(str, data))
+		result = "Merge Sort \n"' '.join(map(str, data))
 		data = copy.deepcopy(numbers)
 
 # creating main user interface frame
@@ -135,10 +134,10 @@ Label(Mainframe, text="201510298 팽건우",
 # name of the sorting algorithm
 algmenu = ttk.Combobox(Mainframe, 
 					   textvariable=select_alg, 
-					   values=["Selection Sort","Insertion Sort","Bubble Sort", "Quick Sort", "Merge Sort", ])
+					   values=["Selection Sort","Insertion Sort","Bubble Sort", "Quick Sort", "Merge Sort"])
 algmenu.grid(row=0, column=1, padx=5, pady=5)
 algmenu.current(0)
-  
+
 # creating Start Button to start 
 # the sorting visualization process
 Button(Mainframe, text="Sort START", 
@@ -147,33 +146,13 @@ Button(Mainframe, text="Sort START",
 									 column=3, 
 									 padx=5, 
 									 pady=5)
-  
-# creating Speed Bar using scale in Tkinter
-# speedbar = Scale(Mainframe, from_=0.10, 
-#                  to=2.0, length=100, digits=2,
-#                  resolution=0.2, orient=HORIZONTAL, 
-#                  label="Select Speed")
-# speedbar.grid(row=0, column=2, 
-#               padx=5, pady=5)
-  
-# second row components
-# sizeEntry : scale to select 
-# the size/number of data bars
+
 sizeEntry = Scale(Mainframe, from_=3, 
 				  to=60, resolution=1,
 				  orient=HORIZONTAL, 
 				  label="Size")
 sizeEntry.grid(row=1, column=0, 
 			   padx=5, pady=5)
-  
-# minEntry : scale to select the 
-# minimum value of data bars
-# minEntry = Scale(Mainframe, from_=0, 
-#                  to=10, resolution=1,
-#                  orient=HORIZONTAL, 
-#                  label="Minimun Value")
-# minEntry.grid(row=1, column=1, 
-#               padx=5, pady=5)
 
 # input file 
 input_file = Button(Mainframe, text="find input file", 
@@ -182,14 +161,6 @@ input_file = Button(Mainframe, text="find input file",
 											padx=5,
 											pady=5)
 
-# maxEntry : scale to select the 
-# maximum value of data bars
-# maxEntry = Scale(Mainframe, from_=10, 
-# 				 to=100, resolution=1,
-# 				 orient=HORIZONTAL, 
-# 				 label="Maximun Value")
-# maxEntry.grid(row=1, column=2, 
-# 			  padx=5, pady=5)
 
 output_file = Button(Mainframe, text="Save result file", 
 					command=save_file).grid(row=1,
@@ -204,8 +175,6 @@ Button(Mainframe, text="Make bar",
 							  column=3, 
 							  padx=5, 
 							  pady=5)
-
-
 
 # to stop automatic window termination
 root.mainloop()

@@ -11,8 +11,6 @@ def insertion_sort(data, drawData):
 				drawData(data, getColorArray(data, j))
 				time.sleep(0.3)
 
-	drawData(data, ['Green' for x in range(n)])
-
 
 def getColorArray(data, jdx):
 	colorArray = []
